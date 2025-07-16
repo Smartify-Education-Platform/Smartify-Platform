@@ -16,16 +16,16 @@ var recovery_users = make(map[string]string)
 // @Tags         password_recovery
 // @Accept       json
 // @Produce      json
-// @Param        credentials  body  database.User  true  "Email и пароль"
-// @Success		 200 {object} Success_answer
-// @Failure		 405 {object} Error_answer
-// @Failure		 400 {object} Error_answer
-// @Router       /api/forgot_password [post]
+// @Param        credentials  body  Email_struct  true  "Email"
+// @Success		 200	{object}	Success_answer
+// @Failure		 405	{object}	Error_answer
+// @Failure		 400	{object}	Error_answer
+// @Router       /forgot_password [post]
 func PasswordRecovery_ForgotPassword(w http.ResponseWriter, r *http.Request) {
 	log.Println("Request to recovery password!")
 	w.Header().Set("Content-Type", "application/json")
 
-	var request database.User
+	var request Email_struct
 
 	if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
@@ -88,10 +88,10 @@ func PasswordRecovery_ForgotPassword(w http.ResponseWriter, r *http.Request) {
 // @Accept       json
 // @Produce      json
 // @Param        credentials  body  Code_verification  true  "Email и код"
-// @Success		 200 {object} Success_answer
-// @Failure		 405 {object} Error_answer
-// @Failure		 400 {object} Error_answer
-// @Router       /api/commit_code_reset_password [post]
+// @Success		 200	{object}	Success_answer
+// @Failure		 405	{object}	Error_answer
+// @Failure		 400	{object}	Error_answer
+// @Router       /commit_code_reset_password [post]
 func PasswordRecovery_CommitCode(w http.ResponseWriter, r *http.Request) {
 	log.Println("Request to recovery password!")
 	w.Header().Set("Content-Type", "application/json")
@@ -151,10 +151,10 @@ func PasswordRecovery_CommitCode(w http.ResponseWriter, r *http.Request) {
 // @Accept       json
 // @Produce      json
 // @Param        credentials  body  Update_password  true  "Email и пароль"
-// @Success		 200 {object} Success_answer
-// @Failure		 405 {object} Error_answer
-// @Failure		 400 {object} Error_answer
-// @Router       /api/reset_password [post]
+// @Success		 200	{object}	Success_answer
+// @Failure		 405	{object}	Error_answer
+// @Failure		 400	{object}	Error_answer
+// @Router       /reset_password [post]
 func PasswordRecovery_ResetPassword(w http.ResponseWriter, r *http.Request) {
 	log.Println("Request to recovery password!")
 	w.Header().Set("Content-Type", "application/json")

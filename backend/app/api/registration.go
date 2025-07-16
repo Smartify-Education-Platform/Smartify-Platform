@@ -170,6 +170,7 @@ func RegistrationHandler_CodeValidation(w http.ResponseWriter, r *http.Request) 
 // @Tags         registration
 // @Accept       json
 // @Produce      json
+// @Param        credentials  body	User_email_password  true  "Email и пароль"
 // @Success		 200 {object} Tokens_answer
 // @Failure		 405 {object} Error_answer
 // @Failure		 400 {object} Error_answer
@@ -185,11 +186,8 @@ func RegistrationHandler_Password(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("Cannot decode request")
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]string{
-			"error": "Invalid JSON",
-		})
 		json.NewEncoder(w).Encode(Error_answer{
-			Error: "Code does not equal...",
+			Error: "Invalid JSON",
 			Code:  http.StatusBadRequest,
 		})
 		return
