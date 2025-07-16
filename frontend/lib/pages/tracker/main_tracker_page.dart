@@ -133,7 +133,20 @@ class _ProgressPageState extends State<ProgressPage> {
             ),
             const SizedBox(height: 32),
             // Список предметов
-            Text(AppLocalizations.of(context)!.subjects, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.subjects,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                IconButton(
+                  onPressed: _addSubject,
+                  icon: const Icon(Icons.add, color: Colors.teal),
+                  tooltip: "Add subject",
+                ),
+              ],
+            ),
             const SizedBox(height: 12),
             ListView.builder(
               shrinkWrap: true,
