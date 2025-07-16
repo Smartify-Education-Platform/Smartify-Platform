@@ -1,13 +1,13 @@
 name: Smartify CI/CD
 
-on:
-  push:
-    branches:
-      - main
-      - Back
-  pull_request:
-    branches:
-      - main
+# on:
+#   push:
+#     branches:
+#       - main
+#       - Back
+#   pull_request:
+#     branches:
+#       - main
 
 jobs:
   test:
