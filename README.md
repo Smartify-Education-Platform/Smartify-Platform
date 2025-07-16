@@ -1,4 +1,4 @@
-# Smartify — AI-Powered Educational Platform for High School Students
+# Smartify Platform — Educational Platform for High School Students
 
 **Smartify** is an all-in-one educational platform that helps Russian high school students (grades 9–11) navigate their career path, choose the right university, prepare for the Unified State Exam (ЕГЭ), and find suitable tutors.  
 The key feature is **AI-based personalized recommendations** that make the journey clear and accessible for every student.
@@ -42,7 +42,7 @@ The key feature is **AI-based personalized recommendations** that make the journ
 
 ---
 
-### 4. 👩‍🏫 Tutors & Mentors Module
+### 4. 👩‍🏫 Tutors Module
 
 - Find tutors using flexible filters:
   - Subject
@@ -50,14 +50,7 @@ The key feature is **AI-based personalized recommendations** that make the journ
 - Browse detailed tutor profiles, including:
   - Background and experience
   - University they attended
-
----
-
-## 🛠️ Extra Features
-
-- Sync personalized study schedule with **Google Calendar**  
-- **Score prediction** based on current knowledge and progress  
-- Links to **free official resources** (FIPI, Yandex.Education, etc.)
+  - etc.
 
 ---
 

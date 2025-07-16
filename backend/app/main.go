@@ -12,6 +12,7 @@ import (
 	"github.com/IU-Capstone-Project-2025/Smartify/backend/app/auth"
 	"github.com/IU-Capstone-Project-2025/Smartify/backend/app/database"
 	_ "github.com/IU-Capstone-Project-2025/Smartify/backend/app/docs"
+	"github.com/IU-Capstone-Project-2025/Smartify/backend/app/parsers"
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
@@ -22,7 +23,7 @@ import (
 // @contact.name   Smartify Working Mail
 // @contact.email  projectsmartifyapp@gmail.com
 
-// @host      localhost:8080
+// @host      213.226.112.206:22025
 // @BasePath  /api
 
 func main() {
@@ -150,6 +151,21 @@ func main() {
 	//Получение информации о tutor
 	http.Handle("/api/get_tutor", auth.Access(http.HandlerFunc(api.GetTutorInformation)))
 
+	// Возварщяет учителей
+	http.Handle("/api/get_teachers", auth.Access(http.HandlerFunc(api.GetTeachersHandler)))
+
+	// Возварщяет университеты
+	http.HandleFunc("/api/update_university_json", api.RequestToUpdate)
+
+	// Сохраняет трекеры
+	http.HandleFunc("/api/savetrackers", api.SaveTrackers)
+
+	// Сохраняет трекеры
+	http.HandleFunc("/api/gettrackers", api.GetTrackers)
+
+	// Проверяет токены на актуальность
+	http.HandleFunc("/api/checktokens", api.TokenCheck)
+
 	// Для подтверждения по ссылке
 	/* -----------------------------------------------------------------------
 		http.Handle("/reset_password_page/",
@@ -189,6 +205,8 @@ func main() {
 			log.Fatalf("Connection is lost: %v", err)
 		}
 	}
+
+	parsers.StartTeacherParserTicker(24)
 
 	log.Println("Server started on :8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))

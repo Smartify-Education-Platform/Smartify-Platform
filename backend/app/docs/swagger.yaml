@@ -1,8 +1,119 @@
 basePath: /api
 definitions:
-  database.User:
+  api.Code_verification:
+    properties:
+      code:
+        type: string
+      email:
+        type: string
     type: object
-host: localhost:8080
+  api.Email_struct:
+    properties:
+      email:
+        type: string
+    type: object
+  api.Error_answer:
+    properties:
+      code:
+        type: integer
+      error:
+        type: string
+    type: object
+  api.Get_trackers_request:
+    properties:
+      token:
+        type: string
+    type: object
+  api.Refresh_token:
+    properties:
+      refresh_token:
+        type: string
+    type: object
+  api.Success_answer:
+    properties:
+      code:
+        type: integer
+      status:
+        type: string
+    type: object
+  api.Tokens_answer:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    type: object
+  api.Tracker_save:
+    properties:
+      timestamp:
+        type: string
+      token:
+        type: string
+      trackers:
+        items:
+          type: string
+        type: array
+    type: object
+  api.Trackers:
+    properties:
+      trackers:
+        items:
+          type: string
+        type: array
+    type: object
+  api.Tutor_succes:
+    properties:
+      code:
+        type: integer
+      status:
+        type: string
+    type: object
+  api.Update_password:
+    properties:
+      email:
+        type: string
+      newPassword:
+        type: string
+    type: object
+  api.User_email_password:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  database.Tutor:
+    properties:
+      cource:
+        type: integer
+      interests:
+        items:
+          type: string
+        type: array
+      timestamp:
+        type: string
+      university:
+        items:
+          type: string
+        type: array
+      user_id:
+        type: integer
+    type: object
+  database.University:
+    properties:
+      country:
+        type: string
+      extra_data:
+        additionalProperties: true
+        type: object
+      id:
+        type: string
+      name:
+        type: string
+      timestamp:
+        type: string
+    type: object
+host: 213.226.112.206:22025
 info:
   contact:
     email: projectsmartifyapp@gmail.com
@@ -11,28 +122,192 @@ info:
   title: Smartify Backend API
   version: "1.0"
 paths:
+  /add_tutor:
+    post:
+      consumes:
+      - application/json
+      description: Доступно только аутентифицированным пользователям с ролью тьютора
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Tutor_succes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+      summary: Добавление/обновление информации о тьюторе
+      tags:
+      - tutor
+  /checkTokens:
+    post:
+      consumes:
+      - application/json
+      description: возращяет успешные ответ, если токены не просрочены
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Success_answer'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+      summary: Функция проверки токенов
+      tags:
+      - test
   /commit_code_reset_password:
     post:
       consumes:
       - application/json
-      description: Просто говорит привет, а точнее "ok"
+      description: Меняет пароль после подтверждения кода
+      parameters:
+      - description: Email и код
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/api.Code_verification'
       produces:
       - application/json
-      responses: {}
-      summary: Функция проверки доступности
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Success_answer'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+      summary: Установка нового пароля
       tags:
-      - auth
+      - password_recovery
   /forgot_password:
     post:
       consumes:
       - application/json
       description: Отправляет код подтверждения на email
+      parameters:
+      - description: Email
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/api.Email_struct'
       produces:
       - application/json
-      responses: {}
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Success_answer'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/api.Error_answer'
       summary: Запрос на сброс пароля
       tags:
-      - auth
+      - password_recovery
+  /get_tutor:
+    get:
+      consumes:
+      - application/json
+      description: Доступно только аутентифицированным пользователям с ролью тьютора
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/database.Tutor'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+      summary: Получение информации о тьюторе
+      tags:
+      - tutor
+  /gettrackers:
+    post:
+      consumes:
+      - application/json
+      description: Пользовтаель получет трекеры с сервера
+      parameters:
+      - description: Access Token
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/api.Get_trackers_request'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Trackers'
+        "304":
+          description: Not Modified
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+      summary: Для получения трекеров с сервера
+      tags:
+      - trackers
+  /hello:
+    get:
+      consumes:
+      - application/json
+      description: Просто говорит привет, а точнее "ok"
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Success_answer'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+      summary: Функция проверки доступности
+      tags:
+      - test
   /login:
     post:
       consumes:
@@ -44,13 +319,29 @@ paths:
         name: credentials
         required: true
         schema:
-          $ref: '#/definitions/database.User'
+          $ref: '#/definitions/api.User_email_password'
       produces:
       - application/json
-      responses: {}
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: Object
+        "400":
+          description: Bad Request
+          schema:
+            type: Object
+        "405":
+          description: Method Not Allowed
+          schema:
+            type: Object
+        "500":
+          description: Internal Server Error
+          schema:
+            type: Object
       summary: Аутентификация пользователя
       tags:
-      - auth
+      - login
   /questionnaire:
     post:
       consumes:
@@ -59,8 +350,6 @@ paths:
       produces:
       - application/json
       responses: {}
-      security:
-      - BearerAuth: []
       summary: Создание новой анкеты
       tags:
       - questionnaire
@@ -69,54 +358,207 @@ paths:
       consumes:
       - application/json
       description: Возвращает новую пару access/refresh токенов
+      parameters:
+      - description: refresh token
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/api.Refresh_token'
       produces:
       - application/json
-      responses: {}
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Success_answer'
       summary: Обновление JWT-токена
       tags:
-      - auth
+      - refresh_token
   /registration_codevalidation:
     post:
       consumes:
       - application/json
       description: Валидирует код, отправленный на email
+      parameters:
+      - description: Email и пароль
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/api.Code_verification'
       produces:
       - application/json
-      responses: {}
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Tokens_answer'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/api.Error_answer'
       summary: Проверка кода подтверждения
       tags:
-      - auth
+      - registration
   /registration_emailvalidation:
     post:
       consumes:
       - application/json
       description: Проверяет email и отправляет код подтверждения
+      parameters:
+      - description: Email и пароль
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/api.Email_struct'
       produces:
       - application/json
-      responses: {}
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Success_answer'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.Error_answer'
       summary: Отправка email для регистрации
       tags:
-      - auth
+      - registration
   /registration_password:
     post:
       consumes:
       - application/json
       description: Завершает регистрацию, сохраняя пароль
+      parameters:
+      - description: Email и пароль
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/api.User_email_password'
       produces:
       - application/json
-      responses: {}
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Tokens_answer'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/api.Error_answer'
       summary: Установка пароля
       tags:
-      - auth
+      - registration
   /reset_password:
     post:
       consumes:
       - application/json
-      description: Меняет пароль после подтверждения кода
+      description: Проверяет код и разрешает смену пароля
+      parameters:
+      - description: Email и пароль
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/api.Update_password'
       produces:
       - application/json
-      responses: {}
-      summary: Установка нового пароля
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Success_answer'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+      summary: Подтверждение кода для сброса пароля
       tags:
-      - auth
+      - password_recovery
+  /savetrackers:
+    post:
+      consumes:
+      - application/json
+      description: Пользовтаель отправляет трекеры с устройства. Сервер записывает
+        их в базуданных, чтобы трекеры были доступны на раззных устройствах
+      parameters:
+      - description: Токен, время и трекеры
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/api.Tracker_save'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Success_answer'
+        "304":
+          description: Not Modified
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+      summary: Для сохранения трекеров на сервере
+      tags:
+      - trackers
+  /update_university_json:
+    get:
+      description: Возвращяет universities.json файл
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully downloaded universities.json
+          schema:
+            items:
+              $ref: '#/definitions/database.University'
+            type: array
+        "400":
+          description: Bad request - Only GET method allowed
+          schema:
+            type: string
+        "500":
+          description: Internal server error - Failed to send file
+          schema:
+            type: string
+      summary: Эндпоинт для обновления университетов
+      tags:
+      - universities
 swagger: "2.0"
