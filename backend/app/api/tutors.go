@@ -45,18 +45,9 @@ func GiveTutorRole(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(Tutor_succes{Status: "Tutor role given", Code: http.StatusOK})
+	json.NewEncoder(w).Encode(map[string]string{"status": "Tutor role given"})
 }
 
-// @Summary      Добавление/обновление информации о тьюторе
-// @Description  Доступно только аутентифицированным пользователям с ролью тьютора
-// @Tags         tutor
-// @Accept       json
-// @Produce      json
-// @Success      200	{object}	Tutor_succes ""
-// @Failure      400	{object}	Error_answer ""
-// @Failure      401	{object}	Error_answer ""
-// @Router       /api/add_tutor [post]
 func ChangeTutorInformation(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -105,18 +96,9 @@ func ChangeTutorInformation(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(Tutor_succes{Status: "Tutor updated", Code: http.StatusOK})
+	json.NewEncoder(w).Encode(map[string]string{"status": "Tutor updated"})
 }
 
-// @Summary      Получение информации о тьюторе
-// @Description  Доступно только аутентифицированным пользователям с ролью тьютора
-// @Tags         tutor
-// @Accept       json
-// @Produce      json
-// @Success      200  {object}  database.Tutor
-// @Failure      400  {object}  Error_answer
-// @Failure      401  {object}  Error_answer
-// @Router       /api/get_tutor [get]
 func GetTutorInformation(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)

@@ -1,6 +1,16 @@
 version: '3.8'
 
 services:
+  ml:
+    build:
+      context: ./ml
+    ports:
+      - "8091:8091"
+    volumes:
+      - ./database:/app/database
+    restart: always
+    networks:
+      - internal
   db:
     image: postgres:15
     ports:
@@ -43,14 +53,10 @@ services:
     depends_on:
       - db
       - mongo
-    environment:
-      - DB_HOST=db
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
-      - DB_NAME=smartify
-      - DB_PORT=5432
-      - MONGO_URI=mongodb://root:root@mongo:27017/admin
-    container_name: backend
+      - ml
+    env_file:
+    - .env.production
+    container_name: smartify_prod-backend
     restart: always
     networks:
       - external
