@@ -73,13 +73,15 @@ class _ProgressPageState extends State<ProgressPage> {
     taskManager.saveAll();
   }
 
-  void _openCalendar() {
-    Navigator.push(
+  void _openCalendar() async {
+    await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => CalendarPage(),
       ),
     );
+    // После возврата из календаря обновляем данные
+    await loadSavedSubjects();
   }
 
   @override

@@ -5,6 +5,7 @@ import 'package:smartify/pages/universities/filter.dart';
 import 'package:smartify/pages/universities/filter_page.dart';
 import 'package:smartify/pages/universities/uniDetPAge.dart';
 import 'package:smartify/pages/universities/universityCard.dart';
+import 'package:smartify/pages/api_server/api_server.dart';
 import 'favorite_uni_card.dart';
 import 'package:smartify/l10n/app_localizations.dart';
 
@@ -28,12 +29,15 @@ class _UniversityPageState extends State<UniversityPage> {
   }
 
   Future<void> loadUniversityData() async {
-    final String jsonString = await rootBundle.loadString('assets/universities.json');
-    final List data = json.decode(jsonString);
+    final List data = await UniversitiesMeneger.loadSavedJson();
     setState(() {
       universities = data;
       filteredUniversities = data;
     });
+  }
+
+  Future<void> refreshUniversityList() async {
+    await UniversitiesMeneger.GetUniversititesJSON();
   }
 
   void filterSearch(String query) {
@@ -111,7 +115,9 @@ class _UniversityPageState extends State<UniversityPage> {
           )
         ],
       ),
-      body: universities.isEmpty
+      body: RefreshIndicator(
+        onRefresh: refreshUniversityList,
+        child: universities.isEmpty
           ? const Center(child: CircularProgressIndicator())
           : CustomScrollView(
               slivers: [
@@ -207,6 +213,7 @@ class _UniversityPageState extends State<UniversityPage> {
                 ),
               ],
             ),
+      ),
     );
   }
 }
@@ -266,33 +273,41 @@ class _FavoriteUniversitiesCarouselState
         const SizedBox(height: 8),
         SizedBox(
           height: 200,
-          child: PageView.builder(
-            controller: _pageController,
-            itemCount: widget.favorites.length,
-            itemBuilder: (context, index) {
-              final favUni = widget.favorites[index];
-              return AnimatedBuilder(
-                animation: _pageController,
-                builder: (context, child) {
-                  double value = 1.0;
-                  if (_pageController.position.haveDimensions) {
-                    value = (_pageController.page! - index).abs();
-                    value = (1 - (value * 0.3)).clamp(0.0, 1.0);
-                  }
-                  return Center(
-                    child: Transform.scale(
-                      scale: Curves.easeOut.transform(value),
-                      child: child,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              double screenWidth = MediaQuery.of(context).size.width;
+              double cardWidth = screenWidth * 0.7; // 70% ширины экрана
+              return PageView.builder(
+                controller: _pageController,
+                itemCount: widget.favorites.length,
+                itemBuilder: (context, index) {
+                  final favUni = widget.favorites[index];
+                  return AnimatedBuilder(
+                    animation: _pageController,
+                    builder: (context, child) {
+                      double value = 1.0;
+                      if (_pageController.position.haveDimensions) {
+                        value = (_pageController.page! - index).abs();
+                        value = (1 - (value * 0.3)).clamp(0.0, 1.0);
+                      }
+                      return Center(
+                        child: Transform.scale(
+                          scale: Curves.easeOut.transform(value),
+                          child: child,
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: FavoriteUniversityCard(
+                        university: favUni,
+                        onTap: () => widget.onTap(favUni),
+                        width: cardWidth,
+                        height: 200,
+                      ),
                     ),
                   );
                 },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: FavoriteUniversityCard(
-                    university: favUni,
-                    onTap: () => widget.onTap(favUni),
-                  ),
-                ),
               );
             },
           ),

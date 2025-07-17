@@ -5,7 +5,7 @@ import 'package:smartify/pages/account/account_page.dart';
 import 'package:smartify/pages/professions/professions_page.dart';
 import 'package:smartify/pages/teachers/teachers_list_page.dart';
 import 'package:smartify/l10n/app_localizations.dart';
-
+import 'package:smartify/pages/professions/spheres_page.dart';
 
 void main() {
   runApp(const SmartifyApp());
@@ -36,7 +36,6 @@ class _DashboardPageState extends State<DashboardPage> {
     return Scaffold(
       // backgroundColor: Colors.white, // убрано для поддержки темы
       appBar: AppBar(
-
         // backgroundColor: Colors.white, // убрано для поддержки темы
         elevation: 0,
         automaticallyImplyLeading: false, // We'll manually control it
@@ -74,7 +73,6 @@ class _DashboardPageState extends State<DashboardPage> {
                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(16),
                               bottomRight: Radius.circular(16),
-
                             ),
                           );
                         },
@@ -131,13 +129,11 @@ class _DashboardPageState extends State<DashboardPage> {
                       Row(
                         children: [
                           Expanded(
-
                             child: _TopicCard(
                               title: AppLocalizations.of(context)!.universities,
                               subtitle: AppLocalizations.of(context)!.moreThanHundredUniversities,
                               assetImage: 'university.png',
                               onPressed: () {
-
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -155,14 +151,12 @@ class _DashboardPageState extends State<DashboardPage> {
                           ),
                           const SizedBox(width: 12),
                           Expanded(
-
                             child: _TopicCard(
                               title: AppLocalizations.of(context)!.preparationForEge,
                               subtitle: AppLocalizations.of(context)!.trackYourProgress,
                               assetImage: 'career.png',
                               onPressed: () {
                                   Navigator.push(
-
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => const ProgressPage(),
@@ -294,10 +288,8 @@ class _TopicCardState extends State<_TopicCard> {
                 color: Colors.black,
                 borderRadius: BorderRadius.circular(16),
               ),
-
               onPressed: onPressed,
               child: Text(AppLocalizations.of(context)!.go),
-
             ),
           ),
         ],

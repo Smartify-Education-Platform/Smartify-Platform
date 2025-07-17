@@ -14,16 +14,13 @@ class CalendarPage extends StatefulWidget {
 class _CalendarPageState extends State<CalendarPage> {
   DateTime _selectedDate = DateTime.now();
   late Future<void> _localeFuture;
-
   late final List<DateTime> _dateRange;
-
 
   @override
   void initState() {
     super.initState();
     // Инициализация локали
     _localeFuture = initializeDateFormatting('ru');
-
     DateTime today = DateTime.now();
     DateTime oneMonthAhead = DateTime(today.year, today.month + 1, today.day);
     int days = oneMonthAhead.difference(today).inDays + 1;
@@ -31,7 +28,6 @@ class _CalendarPageState extends State<CalendarPage> {
       days,
       (index) => today.add(Duration(days: index)),
     );
-
   }
 
   bool isSameDay(DateTime a, DateTime b) {
@@ -55,7 +51,6 @@ class _CalendarPageState extends State<CalendarPage> {
     return FutureBuilder(
       future: _localeFuture,
       builder: (context, snapshot) {
-
         if (snapshot.connectionState != ConnectionState.done) {
           return const Scaffold(body: Center(child: CircularProgressIndicator()));
         }
@@ -128,26 +123,21 @@ class _CalendarPageState extends State<CalendarPage> {
                             color: isSelected ? const Color(0xFF26977F) : Colors.transparent,
                             borderRadius: BorderRadius.circular(12),
                           ),
-
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
                                 DateFormat('E', 'ru').format(date),
                                 style: TextStyle(
-
                                   fontSize: 12,
                                   color: isSelected ? Colors.white : Colors.grey,
-
                                 ),
                               ),
                               const SizedBox(height: 4),
                               Text(
                                 date.day.toString(),
                                 style: TextStyle(
-
                                   fontSize: 16,
-
                                   fontWeight: FontWeight.bold,
                                   color: isSelected ? Colors.white : Colors.black,
                                 ),
@@ -159,7 +149,6 @@ class _CalendarPageState extends State<CalendarPage> {
                     },
                   ),
                 ),
-
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                   child: Row(
@@ -168,7 +157,6 @@ class _CalendarPageState extends State<CalendarPage> {
                       SizedBox(width: 32),
                       Text("Предмет", style: TextStyle(fontWeight: FontWeight.w600)),
                     ],
-
                   ),
                 ),
                 Expanded(

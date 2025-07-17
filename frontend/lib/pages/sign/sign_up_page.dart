@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:smartify/pages/authorization/authorization_page.dart';
@@ -492,5 +491,4 @@ void dispose() {
   passwordController.dispose();
   super.dispose();
 }
-
 }
