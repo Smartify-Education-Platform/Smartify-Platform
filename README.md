@@ -290,6 +290,7 @@ This UML diagram describes domain entities used in the system, representing a da
   - CupertinoButton
   - CupertinoAlertDialog
   - CupertinoTextField and so on
+- [x] Recomendation system implementation for quesionnaire
 
 
 Total points implemented: 29/30 (excluding bonus points)
